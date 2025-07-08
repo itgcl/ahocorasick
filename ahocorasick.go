@@ -70,13 +70,13 @@ func (m *Matcher) getFreeNode() *node {
 func (m *Matcher) buildTrie(dictionary []string) {
 	// estimate the number of trie nodes needed
 	// for rune-based implementation, calculate total number of runes
-	max := 1
+	maxNodes := 1
 	for _, word := range dictionary {
 		for range word { // iterating over a string yields runes
-			max++
+			maxNodes++
 		}
 	}
-	m.trie = make([]node, max)
+	m.trie = make([]node, maxNodes)
 
 	m.getFreeNode() // allocate root node
 
