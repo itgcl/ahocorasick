@@ -1,3 +1,7 @@
+// ahocorasick_test.go: test suite for ahocorasick
+//
+// Copyright (c) 2013 CloudFlare, Inc.
+
 package ahocorasick
 
 import (
@@ -14,7 +18,7 @@ func assert(t *testing.T, b bool) {
 }
 
 func TestNoPatterns(t *testing.T) {
-	m := NewMatcher([][]byte{})
+	m := NewStringMatcher([]string{})
 	hits := m.Match([]byte("foo bar baz"))
 	assert(t, len(hits) == 0)
 
@@ -308,6 +312,7 @@ func TestLargeDictionaryMatchThreadSafeWorks(t *testing.T) {
 	 */
 	hits := precomputed6.MatchThreadSafe(bytes2)
 	assert(t, len(hits) == 105)
+
 }
 
 func TestContains(t *testing.T) {
@@ -323,12 +328,10 @@ func TestContains(t *testing.T) {
 	assert(t, contains == true)
 }
 
-var (
-	bytes       = []byte("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36")
-	sbytes      = string(bytes)
-	dictionary  = []string{"Mozilla", "Mac", "Macintosh", "Safari", "Sausage"}
-	precomputed = NewStringMatcher(dictionary)
-)
+var bytes = []byte("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36")
+var sbytes = string(bytes)
+var dictionary = []string{"Mozilla", "Mac", "Macintosh", "Safari", "Sausage"}
+var precomputed = NewStringMatcher(dictionary)
 
 func BenchmarkMatchWorks(b *testing.B) {
 	for i := 0; i < b.N; i++ {
@@ -361,10 +364,8 @@ func BenchmarkRegexpWorks(b *testing.B) {
 	}
 }
 
-var (
-	dictionary2  = []string{"Googlebot", "bingbot", "msnbot", "Yandex", "Baiduspider"}
-	precomputed2 = NewStringMatcher(dictionary2)
-)
+var dictionary2 = []string{"Googlebot", "bingbot", "msnbot", "Yandex", "Baiduspider"}
+var precomputed2 = NewStringMatcher(dictionary2)
 
 func BenchmarkMatchFails(b *testing.B) {
 	for i := 0; i < b.N; i++ {
@@ -391,22 +392,17 @@ func BenchmarkRegexpFails(b *testing.B) {
 	}
 }
 
-var (
-	bytes2  = []byte("Firefox is a web browser, and is Mozilla's flagship software product. It is available in both desktop and mobile versions. Firefox uses the Gecko layout engine to render web pages, which implements current and anticipated web standards. As of April 2013, Firefox has approximately 20% of worldwide usage share of web browsers, making it the third most-used web browser. Firefox began as an experimental branch of the Mozilla codebase by Dave Hyatt, Joe Hewitt and Blake Ross. They believed the commercial requirements of Netscape's sponsorship and developer-driven feature creep compromised the utility of the Mozilla browser. To combat what they saw as the Mozilla Suite's software bloat, they created a stand-alone browser, with which they intended to replace the Mozilla Suite. Firefox was originally named Phoenix but the name was changed so as to avoid trademark conflicts with Phoenix Technologies. The initially-announced replacement, Firebird, provoked objections from the Firebird project community. The current name, Firefox, was chosen on February 9, 2004.")
-	sbytes2 = string(bytes2)
-)
+var bytes2 = []byte("Firefox is a web browser, and is Mozilla's flagship software product. It is available in both desktop and mobile versions. Firefox uses the Gecko layout engine to render web pages, which implements current and anticipated web standards. As of April 2013, Firefox has approximately 20% of worldwide usage share of web browsers, making it the third most-used web browser. Firefox began as an experimental branch of the Mozilla codebase by Dave Hyatt, Joe Hewitt and Blake Ross. They believed the commercial requirements of Netscape's sponsorship and developer-driven feature creep compromised the utility of the Mozilla browser. To combat what they saw as the Mozilla Suite's software bloat, they created a stand-alone browser, with which they intended to replace the Mozilla Suite. Firefox was originally named Phoenix but the name was changed so as to avoid trademark conflicts with Phoenix Technologies. The initially-announced replacement, Firebird, provoked objections from the Firebird project community. The current name, Firefox, was chosen on February 9, 2004.")
+var sbytes2 = string(bytes2)
 
-var (
-	dictionary3  = []string{"Mozilla", "Mac", "Macintosh", "Safari", "Phoenix"}
-	precomputed3 = NewStringMatcher(dictionary3)
-)
+var dictionary3 = []string{"Mozilla", "Mac", "Macintosh", "Safari", "Phoenix"}
+var precomputed3 = NewStringMatcher(dictionary3)
 
 func BenchmarkLongMatchWorks(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		precomputed3.Match(bytes2)
 	}
 }
-
 func BenchmarkLongMatchThreadSafeWorks(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		precomputed3.MatchThreadSafe(bytes2)
@@ -432,10 +428,8 @@ func BenchmarkLongRegexpWorks(b *testing.B) {
 	}
 }
 
-var (
-	dictionary4  = []string{"12343453", "34353", "234234523", "324234", "33333"}
-	precomputed4 = NewStringMatcher(dictionary4)
-)
+var dictionary4 = []string{"12343453", "34353", "234234523", "324234", "33333"}
+var precomputed4 = NewStringMatcher(dictionary4)
 
 func BenchmarkLongMatchFails(b *testing.B) {
 	for i := 0; i < b.N; i++ {
@@ -462,10 +456,8 @@ func BenchmarkLongRegexpFails(b *testing.B) {
 	}
 }
 
-var (
-	dictionary5  = []string{"12343453", "34353", "234234523", "324234", "33333", "experimental", "branch", "of", "the", "Mozilla", "codebase", "by", "Dave", "Hyatt", "Joe", "Hewitt", "and", "Blake", "Ross", "mother", "frequently", "performed", "in", "concerts", "around", "the", "village", "uses", "the", "Gecko", "layout", "engine"}
-	precomputed5 = NewStringMatcher(dictionary5)
-)
+var dictionary5 = []string{"12343453", "34353", "234234523", "324234", "33333", "experimental", "branch", "of", "the", "Mozilla", "codebase", "by", "Dave", "Hyatt", "Joe", "Hewitt", "and", "Blake", "Ross", "mother", "frequently", "performed", "in", "concerts", "around", "the", "village", "uses", "the", "Gecko", "layout", "engine"}
+var precomputed5 = NewStringMatcher(dictionary5)
 
 func BenchmarkMatchMany(b *testing.B) {
 	for i := 0; i < b.N; i++ {
@@ -527,10 +519,8 @@ func BenchmarkLongRegexpMany(b *testing.B) {
 	}
 }
 
-var (
-	dictionary6  = []string{"2004", "2013", "9", "a", "an", "and", "anticipated", "approximately", "April", "as", "available", "avoid", "began", "believed", "Blake", "bloat", "both", "branch", "browser", "browsers", "but", "by", "changed", "chosen", "codebase", "combat", "commercial", "community", "compromised", "conflicts", "created", "creep", "current", "Dave", "desktop", "developer-driven", "engine", "experimental", "feature", "February", "Firebird", "Firefox", "flagship", "from", "Gecko", "has", "Hewitt", "Hyatt", "implements", "in", "initially-announced", "intended", "is", "it", "Joe", "layout", "making", "mobile", "most-used", "Mozilla", "Mozilla's", "name", "named", "Netscape's", "objections", "of", "on", "originally", "pages", "Phoenix", "product", "project", "provoked", "render", "replace", "replacement", "requirements", "Ross", "saw", "share", "so", "software", "sponsorship", "stand-alone", "standards", "Suite", "Suite's", "Technologies", "the", "The", "they", "They", "third", "to", "trademark", "usage", "uses", "utility", "versions", "was", "web", "what", "which", "with", "worldwide"}
-	precomputed6 = NewStringMatcher(dictionary6)
-)
+var dictionary6 = []string{"2004", "2013", "9", "a", "an", "and", "anticipated", "approximately", "April", "as", "available", "avoid", "began", "believed", "Blake", "bloat", "both", "branch", "browser", "browsers", "but", "by", "changed", "chosen", "codebase", "combat", "commercial", "community", "compromised", "conflicts", "created", "creep", "current", "Dave", "desktop", "developer-driven", "engine", "experimental", "feature", "February", "Firebird", "Firefox", "flagship", "from", "Gecko", "has", "Hewitt", "Hyatt", "implements", "in", "initially-announced", "intended", "is", "it", "Joe", "layout", "making", "mobile", "most-used", "Mozilla", "Mozilla's", "name", "named", "Netscape's", "objections", "of", "on", "originally", "pages", "Phoenix", "product", "project", "provoked", "render", "replace", "replacement", "requirements", "Ross", "saw", "share", "so", "software", "sponsorship", "stand-alone", "standards", "Suite", "Suite's", "Technologies", "the", "The", "they", "They", "third", "to", "trademark", "usage", "uses", "utility", "versions", "was", "web", "what", "which", "with", "worldwide"}
+var precomputed6 = NewStringMatcher(dictionary6)
 
 func BenchmarkLargeMatchWorks(b *testing.B) {
 	for i := 0; i < b.N; i++ {
